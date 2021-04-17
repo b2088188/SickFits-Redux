@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { client } from "lib/api-client";
 import styled from "styled-components/macro";
 import Product from "./Product";
-//import { getAllProductsQuery } from '../lib/query/product';
+import { useDispatch, useSelector } from "react-redux";
+import { FETCH_PRODUCTS } from "redux/actions/products";
 
 const ProductsList = styled.div`
 	display: grid;
@@ -10,27 +12,28 @@ const ProductsList = styled.div`
 `;
 
 function Products({ page }) {
-	// const { data: products, isLoading } = useQuery({
-	// 	queryKey: ["products", { page }],
-	// 	queryFn: () =>
-	// 		client(``, {
-	// 			method: "POST",
-	// 			query: getAllProductsQuery({
-	// 				page,
-	// 			}),
-	// 		}).then(({ data }) => data.allProducts),
-	// 	placeholderData: [],
-	// });
-
-	return (
-		<div>
-			<ProductsList>
-				{[1, 2, 3].map((el, i) => (
-					<Product product={el} key={el.id} />
-				))}
-			</ProductsList>
-		</div>
+	const dispatch = useDispatch();
+	const { data: products, status } = useSelector(
+		(state) => state.productsState
 	);
+	const isIdle = status === "idle";
+	const isLoading = status === "pending";
+	const isSuccess = status === "resolved";
+	useEffect(() => {
+		dispatch({ type: FETCH_PRODUCTS });
+	}, []);
+
+	if (isIdle || isLoading) return null;
+	if (isSuccess)
+		return (
+			<div>
+				<ProductsList>
+					{products.map((el, i) => (
+						<Product product={el} key={el.id} />
+					))}
+				</ProductsList>
+			</div>
+		);
 }
 
 export default Products;

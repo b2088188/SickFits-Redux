@@ -6,9 +6,9 @@ import PriceTag from "./styles/PriceTag";
 function Product({ product }) {
 	return (
 		<ItemStyles>
-			<img src={"124.jpg"} alt="Image" />
+			<img src={product.photo.image.publicUrlTransformed} alt={product.name} />
 			<Title>
-				<Link href={`/product/${123}`}>
+				<Link href={`/product/${product.id}`}>
 					<a>Product</a>
 				</Link>
 			</Title>
@@ -19,7 +19,7 @@ function Product({ product }) {
 					href={{
 						pathname: "update",
 						query: {
-							productId: 123,
+							productId: product.id,
 						},
 					}}
 				>

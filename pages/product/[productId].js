@@ -5,4 +5,18 @@ function IndividualProductPage() {
 	return <IndividualProduct />;
 }
 
+// export async function getStaticProps(context) {
+// 	console.log(context);
+// 	return {
+// 		props: {},
+// 	};
+// }
+
+// export async function getStaticPaths() {
+// 	return {
+// 		paths: [{ params: { productId: "1" } }],
+// 		fallback: false,
+// 	};
+// }
+
 export default IndividualProductPage;
