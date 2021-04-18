@@ -20,8 +20,8 @@ function Products({ page }) {
 	const isLoading = status === "pending";
 	const isSuccess = status === "resolved";
 	useEffect(() => {
-		dispatch({ type: FETCH_PRODUCTS });
-	}, []);
+		dispatch({ type: FETCH_PRODUCTS, payload: { page } });
+	}, [page]);
 
 	if (isIdle || isLoading) return null;
 	if (isSuccess)

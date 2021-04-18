@@ -31,7 +31,7 @@ const productsSlice = createSlice({
       console.log("HYDRATE", state, action.payload);
       return {
         ...state,
-        ...action.payload.products,
+        ...action.payload.productsState,
       };
     });
   },

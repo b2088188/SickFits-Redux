@@ -9,7 +9,7 @@ function ProductPage() {
 
 	return (
 		<>
-			<Products />
+			<Products page={!page ? 1 : Number(page)} />
 			<Pagination page={!page ? 1 : Number(page)} />
 		</>
 	);

@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { client } from "lib/api-client";
 import styled from "styled-components/macro";
+import { useSelector } from "react-redux";
 
 const ProductStyles = styled.div`
 	display: grid;
@@ -21,19 +22,30 @@ function IndividualProduct() {
 	const {
 		query: { productId },
 	} = useRouter();
+	const { data: product, status } = useSelector((state) => state.productState);
+	const isIdle = status === "idle";
+	const isLoading = status === "pending";
+	const isSuccess = status === "resolved";
 
-	return (
-		<ProductStyles>
-			<Head>
-				<title>Sick Fits | Producy</title>
-			</Head>
-			<img src="test.jpg" alt="Product" />
-			<div className="details">
-				<h2>Title</h2>
-				<p>Description</p>
-			</div>
-		</ProductStyles>
-	);
+	if (isIdle || isLoading) return null;
+	if (isSuccess)
+		return (
+			<ProductStyles>
+				<Head>
+					<title>Sick Fits | Producy</title>
+				</Head>
+				<div>
+					<img
+						src={product.photo.image.publicUrlTransformed}
+						alt={product.name}
+					/>
+				</div>
+				<div className="details">
+					<h2>{product.name}</h2>
+					<p>{product.description}</p>
+				</div>
+			</ProductStyles>
+		);
 }
 
 export default IndividualProduct;

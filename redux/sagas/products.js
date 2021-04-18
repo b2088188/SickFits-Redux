@@ -2,38 +2,16 @@ import { call, takeEvery, put } from "redux-saga/effects";
 import { client } from "lib/api-client";
 import { FETCH_PRODUCTS } from "../actions/products";
 import { fetchLoading, fetchSuccess, fetchFail } from "../reducers/products";
+import { getAllProductsQuery } from "lib/query/product";
 
-function getAllProductsQuery({ page = 1 } = {}) {
-  const skip = (page - 1) * process.env.NEXT_PUBLIC_PER_PAGE;
-  const first = process.env.NEXT_PUBLIC_PER_PAGE;
-
-  return ` query ALL_PRODUCTS_QUERY{
-  allProducts(
-  first:${first}
-  skip:${skip}
-  ){
-    id
-    name
-    price
-    description
-    photo{
-      id
-      image{
-        publicUrlTransformed
-      }
-    }
-  }
-}`;
-}
-
-export function* fetchProducts() {
+export function* fetchProducts(action) {
   try {
     yield put(fetchLoading());
     const {
       data: { allProducts },
     } = yield call(client, "", {
       method: "POST",
-      query: getAllProductsQuery(),
+      query: getAllProductsQuery({ page: action.payload.page }),
     });
     yield put(fetchSuccess({ products: allProducts }));
   } catch (err) {
